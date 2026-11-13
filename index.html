@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#006b68">
+<title>إدارة إنتاج كراتين السجائر</title>
+<style>
+:root{
+  --deep:#004f50;--teal:#007c78;--green:#00a85a;--blue:#0875cf;
+  --ink:#073b45;--muted:#758197;--line:#d7e2ee;--paper:#f4f9fc;
+  --shadow:0 5px 14px rgba(0,63,83,.16);
+}
+*{box-sizing:border-box}
+html{width:100%;min-height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;width:100%;min-height:100vh;background:linear-gradient(180deg,#eaf6fa 0%,#fff 45%,#eaf5fa 100%);color:#10253b;font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;direction:rtl}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{width:min(100%,1024px);margin:0 auto;padding:0 14px 22px}
+.hero{position:relative;margin:0 -14px 14px;padding:20px 18px 24px;color:white;text-align:center;background:radial-gradient(circle at 15% 10%,#087f79,#004b50 68%);border-radius:0 0 42px 42px;box-shadow:var(--shadow);overflow:hidden}
+.hero:after{content:"";position:absolute;inset:auto -8% -35px;height:54px;border-radius:50%;background:#eaf6fa;transform:rotate(-2deg)}
+.hero h1{position:relative;z-index:1;margin:0;font-size:clamp(21px,4.2vw,36px);line-height:1.35;font-weight:850}
+.hero p{position:relative;z-index:1;margin:5px 0 0;font-size:clamp(13px,2.2vw,19px);font-weight:600}
+.date-row{display:flex;justify-content:flex-start;margin:0 0 12px}
+.date-box{display:flex;align-items:center;gap:10px;background:#effafa;border:1px solid #cce7e8;border-radius:18px;padding:8px 12px;box-shadow:var(--shadow);color:var(--deep)}
+.date-box label{font-size:13px;font-weight:800}
+.date-box input{border:0;background:transparent;color:var(--deep);font-weight:750;min-width:0}
+.card{background:#fff;border:1px solid #d8e9ef;border-radius:22px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
+.section-head{padding:11px 16px;background:linear-gradient(100deg,#00a85a,#005657);color:#fff;font-size:clamp(16px,2.8vw,23px);font-weight:850}
+.entry-body{padding:13px 16px 15px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{min-width:0}
+.field.full{grid-column:1/-1}
+.field label{display:block;margin:0 0 5px;color:#42556b;font-size:13px;font-weight:750}
+.field input{width:100%;height:44px;padding:8px 12px;border:1px solid #cbd8e6;border-radius:12px;background:#fff;color:#18364b;outline:none;min-width:0}
+.field input:focus{border-color:#00a879;box-shadow:0 0 0 3px #00a87920}
+.btn{border:0;border-radius:13px;padding:11px 14px;color:#fff;font-weight:850;box-shadow:0 3px 8px #003b4024}
+.btn-add{width:100%;margin-top:11px;background:linear-gradient(100deg,#20d36c,#00765d);font-size:18px}
+.btn-pay{background:linear-gradient(100deg,#21c96b,#00795c)}
+.btn-pay-total{background:linear-gradient(100deg,#f59e0b,#d97706)}
+.payment-row{display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:end;padding:13px 16px}
+.payment-row .field input{height:42px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.stat{min-width:0;min-height:112px;border-radius:22px;padding:13px 15px;color:white;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:center;gap:7px}
+.stat:nth-child(1){background:linear-gradient(120deg,#17c979,#006c60)}
+.stat:nth-child(2){background:linear-gradient(120deg,#169ee9,#064b9c)}
+.stat:nth-child(3){background:linear-gradient(120deg,#13bd76,#006b58)}
+.stat:nth-child(4){background:linear-gradient(120deg,#168fe2,#064b9c)}
+.stat-label{font-size:clamp(14px,2.3vw,20px);font-weight:850;line-height:1.25}
+.stat-value{font-size:clamp(22px,4.3vw,34px);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:ltr;text-align:right}
+.stat-value small{font-size:.48em;direction:rtl}
+.debt-edit{display:flex;gap:6px;align-items:center;margin-top:2px}
+.debt-edit input{width:100%;min-width:0;height:32px;border:1px solid #ffffff80;border-radius:9px;background:#ffffffeb;color:#063e4a;padding:4px 7px;font-weight:800}
+.debt-edit button{border:0;border-radius:9px;padding:6px 9px;background:#fff;color:#00675b;font-size:12px;font-weight:850;white-space:nowrap}
+.table-wrap{max-height:310px;overflow-y:auto;overflow-x:auto;overscroll-behavior:contain;border-bottom-left-radius:22px;border-bottom-right-radius:22px}
+table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px}
+th,td{padding:10px 6px;border-bottom:1px solid #e0e8ef;text-align:center;overflow-wrap:anywhere}
+th{background:#edf7f8;color:#064d50;font-weight:850;position:sticky;top:0;z-index:2}
+tbody tr:nth-child(even){background:#f6f9fc}
+tbody tr.payment-highlight {
+  background-color: #fee2e2 !important;
+  color: #991b1b;
+  font-weight: bold;
+}
+td.notes{text-align:right}
+.actions{display:flex;justify-content:center;gap:4px;flex-wrap:wrap}
+.action-btn{border:0;border-radius:8px;padding:6px 7px;font-size:11px;font-weight:850;color:#fff;white-space:nowrap}
+.edit-btn{background:#168bd5}
+.del-btn{background:#ef4444}
+.empty{text-align:center;padding:22px;color:#7b8797}
+.footer-actions{display:flex;justify-content:center;gap:12px;margin:16px auto 22px;max-width:760px}
+.footer-actions .btn{flex:1;max-width:340px;font-size:clamp(13px,2.2vw,18px);padding:13px 10px}
+.btn-danger{background:linear-gradient(110deg,#ff4d59,#d90d1d)}
+.footer{margin:20px -14px 0;padding:22px 12px;text-align:center;color:white;font-size:16px;font-weight:850;background:linear-gradient(100deg,#007c78,#00474b);border-radius:45% 45% 0 0 / 22% 22% 0 0}
+@media(max-width:560px){
+ .app{padding:0 9px 16px}
+ .hero{margin-left:-9px;margin-right:-9px;padding:16px 10px 21px;border-radius:0 0 30px 30px}
+ .date-row{margin-bottom:9px}
+ .date-box{padding:6px 9px}
+ .card{border-radius:17px;margin-bottom:11px}
+ .section-head{padding:9px 12px}
+ .entry-body{padding:10px}
+ .form-grid{grid-template-columns:1fr;gap:8px}
+ .field.full{grid-column:auto}
+ .field input{height:40px;font-size:14px}
+ .btn-add{font-size:16px;padding:10px}
+ .stats{gap:8px;margin-bottom:11px}
+ .stat{min-height:94px;padding:10px;border-radius:17px}
+ .stat-label{font-size:13px}
+ .stat-value{font-size:clamp(19px,6vw,27px)}
+ .payment-row{grid-template-columns:1fr;padding:10px;gap:7px}
+ .payment-row .field label{font-size:12px}
+ .payment-row .btn{padding:10px 11px;font-size:13px;width:100%}
+ table{font-size:10px}
+ th,td{padding:7px 3px}
+ .action-btn{font-size:9px;padding:5px 5px}
+ .actions{gap:3px}
+ .footer-actions{gap:8px;margin:13px 0 18px}
+ .footer-actions .btn{font-size:12px;padding:11px 5px}
+ .footer{font-size:14px;margin-left:-9px;margin-right:-9px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hero">
+ <h1>إدارة إنتاج كراتين السجائر</h1>
+ <p>سهولة في الإدارة .. دقة في الحسابات</p>
+</header>
+
+<div class="date-row">
+ <div class="date-box">
+   <label for="entryDate">التاريخ</label>
+   <input type="date" id="entryDate" onchange="validateDateInput(this)">
+ </div>
+</div>
+
+<section class="card">
+ <div class="section-head">عدد الكراتين (مثال: 1.5 أو 0.1 ألف)</div>
+ <div class="entry-body">
+  <form id="productionForm" onsubmit="saveEntry(event)">
+   <input type="hidden" id="editingId">
+   <div class="form-grid">
+    <div class="field"><label for="cartonsInput">عدد الكراتين</label><input type="number" id="cartonsInput" step="any" min="0" placeholder="أدخل عدد الكراتين..." required></div>
+    <div class="field"><label for="notes">ملاحظات إضافية</label><input type="text" id="notes" placeholder="ملاحظات إضافية..."></div>
+   </div>
+   <button type="submit" id="submitBtn" class="btn btn-add">＋ إضافة قيد جديد</button>
+  </form>
+ </div>
+</section>
+
+<!-- سجل العمليات -->
+<section class="card">
+ <div class="section-head">سجل العمليات (من الأحدث إلى الأقدم)</div>
+ <div class="table-wrap">
+  <table>
+   <colgroup><col style="width:11%"><col style="width:19%"><col style="width:15%"><col style="width:17%"><col style="width:19%"><col style="width:19%"></colgroup>
+   <thead><tr><th>اليوم</th><th>التاريخ</th><th>الكراتين</th><th>السعر</th><th>الملاحظات</th><th>الإجراءات</th></tr></thead>
+   <tbody id="tableBody"></tbody>
+  </table>
+ </div>
+</section>
+
+<section class="card">
+ <div class="section-head">الإدارة المالية والدفعات</div>
+ <div class="payment-row">
+  <div class="field"><label for="paymentAmount">المبلغ المدفوع (جزئي أو كلي)</label><input type="number" id="paymentAmount" min="0" step="0.01" placeholder="أدخل المبلغ المدفوع"></div>
+  <button type="button" class="btn btn-pay" id="paymentBtn" onclick="processPayment()">تسديد المبلغ</button>
+  <button type="button" class="btn btn-pay-total" onclick="processTotalPayment()">تسديد كلي</button>
+ </div>
+</section>
+
+<!-- الإحصائيات -->
+<section class="stats">
+ <div class="stat"><div class="stat-label">إجمالي الكراتين</div><div class="stat-value" id="totalCartons">0.000 <small>كرتونة</small></div></div>
+ <div class="stat"><div class="stat-label">إجمالي السعر</div><div class="stat-value" id="totalPrice">0.00 <small>شيقل</small></div></div>
+ <div class="stat"><div class="stat-label">المبلغ المدين</div><div class="debt-edit"><input type="number" id="globalDebtInput" min="0" step="0.01" value="0" aria-label="المبلغ المدين"><button type="button" onclick="saveGlobalDebtFromInput()">تحديث</button></div></div>
+ <div class="stat"><div class="stat-label">المبلغ الكلي</div><div class="stat-value" id="totalDue">0.00 <small>شيقل</small></div></div>
+</section>
+
+<div class="footer-actions">
+ <button type="button" class="btn btn-danger" onclick="clearAllData()">تصفير السجل بالكامل　▤</button>
+</div>
+<footer class="footer">إدارة أفضل .. لعمل أكثر نجاحاً</footer>
+</div>
+
+<script>
+let entries = JSON.parse(localStorage.getItem('cigarette_entries') || '[]');
+let globalDebt = Number(localStorage.getItem('cigarette_global_debt') || 0);
+let editingPaymentId = null;
+
+window.addEventListener('DOMContentLoaded', () => {
+ resetFormDate();
+ const todayStr = getLocalDateString();
+ document.getElementById('entryDate').max = todayStr;
+ document.getElementById('globalDebtInput').value = globalDebt;
+ renderApp();
+});
+
+function getLocalDateString(){
+ const d = new Date();
+ return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+}
+
+function resetFormDate(){
+ document.getElementById('entryDate').value = getLocalDateString();
+}
+
+function validateDateInput(input){
+ const todayStr = getLocalDateString();
+ if(input.value > todayStr){
+  alert('عذراً، لا يمكن إضافة أو تحديد تاريخ في المستقبل! يرجى اختيار التاريخ الحالي أو السابق.');
+  input.value = todayStr;
+ }
+}
+
+function saveToStorage(){
+ localStorage.setItem('cigarette_entries',JSON.stringify(entries));
+ localStorage.setItem('cigarette_global_debt',String(globalDebt));
+}
+function calculatePrice(cartons){return cartons*50}
+function getDayName(dateString){
+ const [y,m,d]=dateString.split('-').map(Number);
+ return ['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'][new Date(y,m-1,d).getDay()];
+}
+function safeText(value){
+ return String(value ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function saveGlobalDebtFromInput(){
+ const val=Number(document.getElementById('globalDebtInput').value);
+ if(!Number.isFinite(val)||val<0){alert('الرجاء إدخال مبلغ مدين صحيح.');return}
+ globalDebt=val;saveToStorage();renderApp();
+}
+
+function saveEntry(e){
+ e.preventDefault();
+ const editingId=document.getElementById('editingId').value;
+ const date=document.getElementById('entryDate').value;
+ const cartons=Number(document.getElementById('cartonsInput').value);
+ const notes=document.getElementById('notes').value.trim();
+ 
+ if(!date||!Number.isFinite(cartons)||cartons<=0){alert('أدخل التاريخ وعدد كراتين صحيحاً.');return}
+
+ const todayStr = getLocalDateString();
+ if(date > todayStr){
+  alert('عذراً، لا يمكن إضافة أو تسجيل كراتين لأيام لاحقة (مستقبلية). يرجى اختيار التاريخ الحالي أو السابق.');
+  resetFormDate();
+  return;
+ }
+
+ if(editingId){
+  const item=entries.find(x=>String(x.id)===String(editingId));
+  if(item&&!item.isPayment){Object.assign(item,{date,day:getDayName(date),cartons,price:calculatePrice(cartons),notes})}
+ }else{
+  entries.push({id:Date.now(),date,day:getDayName(date),cartons,price:calculatePrice(cartons),notes,isPayment:false});
+ }
+ saveToStorage();renderApp();
+ document.getElementById('productionForm').reset();
+ document.getElementById('editingId').value='';
+ document.getElementById('submitBtn').textContent='＋ إضافة قيد جديد';
+ resetFormDate();
+}
+
+function editEntry(id){
+ const item=entries.find(x=>x.id===id);
+ if(!item||item.isPayment)return;
+ document.getElementById('editingId').value=item.id;
+ document.getElementById('entryDate').value=item.date;
+ document.getElementById('cartonsInput').value=item.cartons;
+ document.getElementById('notes').value=item.notes||'';
+ document.getElementById('submitBtn').textContent='حفظ التعديل';
+ document.getElementById('productionForm').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function editPaymentEntry(id){
+ const item=entries.find(x=>x.id===id);
+ if(!item||!item.isPayment)return;
+ document.getElementById('paymentAmount').value=item.price;
+ editingPaymentId=id;
+ document.getElementById('paymentBtn').textContent='تحديث التسديد';
+ document.getElementById('paymentAmount').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function deleteEntry(id){
+ const item=entries.find(x=>x.id===id);
+ if(!item)return;
+ if(!confirm('هل أنت متأكد من حذف هذا السجل؟'))return;
+
+ if(item.isPayment){
+  let production=0,paidBefore=0;
+  entries.forEach(ex=>{
+   if(ex.id===id)return;
+   if(ex.isPayment)paidBefore+=Number(ex.price)||0;
+   else production+=Number(ex.price)||0;
+  });
+  const remainingProd = Math.max(0, production - paidBefore);
+  const paymentVal = Number(item.price)||0;
+  
+  if(paymentVal > remainingProd){
+   const debtReduction = paymentVal - remainingProd;
+   globalDebt += debtReduction;
+   document.getElementById('globalDebtInput').value = globalDebt;
+  }
+ }
+
+ entries=entries.filter(x=>x.id!==id);
+ if(editingPaymentId===id)editingPaymentId=null;
+ saveToStorage();renderApp();
+}
+
+function clearAllData(){
+ if(!confirm('هل أنت متأكد من تصفير وحذف جميع البيانات؟'))return;
+ entries=[];globalDebt=0;editingPaymentId=null;
+ localStorage.removeItem('cigarette_entries');localStorage.removeItem('cigarette_global_debt');
+ document.getElementById('globalDebtInput').value=0;
+ document.getElementById('paymentBtn').textContent='تسديد المبلغ';
+ document.getElementById('productionForm').reset();resetFormDate();
+ renderApp();
+}
+
+function processPayment(){
+ const amount=Number(document.getElementById('paymentAmount').value);
+ if(!Number.isFinite(amount)||amount<=0){alert('الرجاء إدخال مبلغ دفع صحيح.');return}
+
+ let production=0,paid=0;
+ entries.forEach(item=>{
+  if(item.id===editingPaymentId)return;
+  if(item.isPayment)paid+=Number(item.price)||0;else production+=Number(item.price)||0;
+ });
+ const remainingProduction = Math.max(0, production - paid);
+
+ if(amount > remainingProduction){
+  const extra = amount - remainingProduction;
+  globalDebt = Math.max(0, globalDebt - extra);
+  document.getElementById('globalDebtInput').value = globalDebt;
+ }
+
+ const today=document.getElementById('entryDate').value;
+ const todayStr = getLocalDateString();
+ if(today > todayStr){
+  alert('عذراً، لا يمكن تحديد تاريخ مستقبلي لإجراء عمليات التسديد!');
+  resetFormDate();
+  return;
+ }
+
+ const cartons=amount/50;
+ if(editingPaymentId){
+  const oldItem = entries.find(x=>x.id===editingPaymentId);
+  if(oldItem){
+   deleteEntry(editingPaymentId);
+  }
+  editingPaymentId=null;
+  document.getElementById('paymentBtn').textContent='تسديد المبلغ';
+ }
+
+ entries.push({id:Date.now(),date:today,day:getDayName(today),cartons,price:amount,notes:`تسديد مبلغ ${amount.toFixed(2)} شيقل`,isPayment:true});
+ document.getElementById('paymentAmount').value='';
+ saveToStorage();renderApp();
+}
+
+function processTotalPayment(){
+ let production=0,paid=0;
+ entries.forEach(item=>{
+  if(item.isPayment)paid+=Number(item.price)||0;else production+=Number(item.price)||0;
+ });
+ const remainingProduction = Math.max(0, production - paid);
+ const totalAmountToPay = remainingProduction + globalDebt;
+
+ if(totalAmountToPay <= 0){alert('لا توجد مبالغ مستحقة أو ديون لتسديدها.');return}
+
+ if(!confirm(`هل أنت متأكد من إجراء التسديد الكلي بمبلغ وقدره ${totalAmountToPay.toFixed(2)} شيقل؟`)) return;
+
+ globalDebt = 0;
+ document.getElementById('globalDebtInput').value = 0;
+
+ const today=document.getElementById('entryDate').value;
+ const todayStr = getLocalDateString();
+ if(today > todayStr){
+  alert('عذراً، لا يمكن تحديد تاريخ مستقبلي لإجراء عمليات التسديد!');
+  resetFormDate();
+  return;
+ }
+
+ const cartons = totalAmountToPay / 50;
+
+ entries.push({
+  id: Date.now(),
+  date: today,
+  day: getDayName(today),
+  cartons: cartons,
+  price: totalAmountToPay,
+  notes: `تسديد كلي شامل (${totalAmountToPay.toFixed(2)} شيقل)`,
+  isPayment: true
+ });
+
+ saveToStorage();
+ renderApp();
+ alert('تم التسديد الكلي بنجاح!');
+}
+
+function renderApp(){
+ const tbody=document.getElementById('tableBody');tbody.innerHTML='';
+ let productionCartons=0,paidCartons=0,productionPrice=0,paidPrice=0;
+ entries.forEach(item=>{
+  if(item.isPayment){paidCartons+=Number(item.cartons)||0;paidPrice+=Number(item.price)||0}
+  else{productionCartons+=Number(item.cartons)||0;productionPrice+=Number(item.price)||0}
+ });
+ const netCartons=Math.max(0,productionCartons-paidCartons);
+ const netPrice=Math.max(0,productionPrice-paidPrice);
+ const totalDue=netPrice+globalDebt;
+ const sorted=[...entries].sort((a,b)=>b.id-a.id);
+ if(!sorted.length){tbody.innerHTML='<tr><td colspan="6" class="empty">لا توجد عمليات مسجلة حتى الآن</td></tr>'}
+ sorted.forEach(item=>{
+  const tr=document.createElement('tr');
+  const sign=item.isPayment?'-':'';
+  const cartons=(Number(item.cartons)||0).toFixed(3);
+  const price=(Number(item.price)||0).toFixed(2);
+  const editFn=item.isPayment?'editPaymentEntry':'editEntry';
+  
+  if(item.isPayment){
+   tr.classList.add('payment-highlight');
+  }
+
+  tr.innerHTML=`
+   <td>${safeText(item.day||getDayName(item.date))}</td>
+   <td dir="ltr">${safeText(item.date)}</td>
+   <td>${sign}${cartons}</td>
+   <td>${sign}${price}</td>
+   <td class="notes">${safeText(item.notes||'-')}</td>
+   <td><div class="actions"><button class="action-btn edit-btn" onclick="${editFn}(${Number(item.id)})">تعديل</button><button class="action-btn del-btn" onclick="deleteEntry(${Number(item.id)})">حذف</button></div></td>`;
+  tbody.appendChild(tr);
+ });
+ document.getElementById('totalCartons').innerHTML=`${netCartons.toFixed(3)} <small>كرتونة</small>`;
+ document.getElementById('totalPrice').innerHTML=`${netPrice.toFixed(2)} <small>شيقل</small>`;
+ document.getElementById('totalDue').innerHTML=`${totalDue.toFixed(2)} <small>شيقل</small>`;
+}
+</script>
+</body>
+</html>
