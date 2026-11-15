@@ -668,6 +668,7 @@ function editPaymentEntry(id){
  const item=entries.find(x=>x.id===id);
  if(!item||!item.isPayment)return;
  document.getElementById('paymentAmount').value=item.price;
+ document.getElementById('entryDate').value=item.date;
  editingPaymentId=id;
  document.getElementById('paymentBtn').textContent='تحديث التسديد';
  document.getElementById('paymentAmount').scrollIntoView({behavior:'smooth',block:'center'});
@@ -758,6 +759,13 @@ function processPayment(){
  const amount=Number(document.getElementById('paymentAmount').value);
  if(!Number.isFinite(amount)||amount<=0){alert('الرجاء إدخال مبلغ دفع صحيح.');return}
 
+ const payDate=document.getElementById('entryDate').value || getTodayLocalDate();
+ const today = getTodayLocalDate();
+ if(payDate > today){
+  alert('لا يمكن تسجيل تسديد مبلغ في تاريخ مستقبلي! الرجاء اختيار تاريخ اليوم أو تاريخ سابق.');
+  return;
+ }
+
  let production=0,paid=0;
  entries.forEach(item=>{
   if(item.id===editingPaymentId)return;
@@ -771,7 +779,6 @@ function processPayment(){
   document.getElementById('globalDebtInput').value = globalDebt;
  }
 
- const today=document.getElementById('entryDate').value;
  const cartons=amount/50;
  if(editingPaymentId){
   entries = entries.filter(x=>x.id!==editingPaymentId);
@@ -782,8 +789,8 @@ function processPayment(){
 
  const newPayment = {
   id:Date.now(),
-  date:today,
-  day:getDayName(today),
+  date:payDate,
+  day:getDayName(payDate),
   cartons,
   price:amount,
   notes:`تسديد مبلغ ${amount.toFixed(2)} شيقل`,
@@ -797,6 +804,13 @@ function processPayment(){
 }
 
 function processTotalPayment(){
+ const payDate=document.getElementById('entryDate').value || getTodayLocalDate();
+ const today = getTodayLocalDate();
+ if(payDate > today){
+  alert('لا يمكن تسجيل تسديد كلي في تاريخ مستقبلي! الرجاء اختيار تاريخ اليوم أو تاريخ سابق.');
+  return;
+ }
+
  let production=0,paid=0;
  entries.forEach(item=>{
   if(item.isPayment)paid+=Number(item.price)||0;else production+=Number(item.price)||0;
@@ -811,13 +825,12 @@ function processTotalPayment(){
  globalDebt = 0;
  document.getElementById('globalDebtInput').value = 0;
 
- const today=document.getElementById('entryDate').value;
  const cartons = totalAmountToPay / 50;
 
  const newPayment = {
   id: Date.now(),
-  date: today,
-  day: getDayName(today),
+  date: payDate,
+  day: getDayName(payDate),
   cartons: cartons,
   price: totalAmountToPay,
   notes: `تسديد كلي شامل (${totalAmountToPay.toFixed(2)} شيقل)`,
@@ -832,6 +845,21 @@ function processTotalPayment(){
  alert('تم التسديد الكلي بنجاح!');
 }
 
+/* ترتيب سجل العمليات حسب التاريخ من الأحدث إلى الأقدم، وإذا تساوى التاريخ تظهر الدفعة (السداد) فوق قيود الإنتاج لنفس اليوم */
+function sortEntriesByDateDesc(list){
+ return [...list].sort((a, b) => {
+  const dateA = a.date || '';
+  const dateB = b.date || '';
+  if(dateB !== dateA) return dateB.localeCompare(dateA);
+  
+  /* إذا كان التاريخ متساوياً، اجعل قيود التسديد (isPayment: true) تظهر أولاً (فوق) قيود الإنتاج */
+  if(a.isPayment && !b.isPayment) return -1;
+  if(!a.isPayment && b.isPayment) return 1;
+
+  return (Number(b.id) || 0) - (Number(a.id) || 0);
+ });
+}
+
 function renderApp(){
  const tbody=document.getElementById('tableBody');tbody.innerHTML='';
  let productionCartons=0,paidCartons=0,productionPrice=0,paidPrice=0;
@@ -842,7 +870,9 @@ function renderApp(){
  const netCartons=Math.max(0,productionCartons-paidCartons);
  const netPrice=Math.max(0,productionPrice-paidPrice);
  const totalDue=netPrice+globalDebt;
- const sorted=[...entries].sort((a,b)=>b.id-a.id);
+
+ const sorted = sortEntriesByDateDesc(entries);
+
  if(!sorted.length){tbody.innerHTML='<tr><td colspan="6" class="empty">لا توجد عمليات مسجلة حتى الآن</td></tr>'}
  sorted.forEach(item=>{
   const tr=document.createElement('tr');
@@ -881,9 +911,9 @@ function renderArchive(){
 
  archivedGroups.forEach((group, idx) => {
   const groupNumber = archivedGroups.length - idx;
-  const prodRecords = [...(group.records || [])]
-   .filter(item => !item.isPayment)
-   .sort((a,b) => b.id - a.id);
+  const prodRecords = sortEntriesByDateDesc(
+   (group.records || []).filter(item => !item.isPayment)
+  );
 
   if(!prodRecords.length) return;
 
@@ -929,12 +959,12 @@ function renderArchive(){
  });
 }
 
-/* عرض صفحة الدفعات (كل تسديد مبلغ يظهر المبلغ ومقابله بالكراتين) */
+/* عرض صفحة الدفعات (مرتبة حسب التاريخ من الأحدث إلى الأقدم) */
 function renderPayments(){
  const container = document.getElementById('paymentsContainer');
  container.innerHTML = '';
 
- const sortedPayments = [...paymentHistory].sort((a,b) => b.id - a.id);
+ const sortedPayments = sortEntriesByDateDesc(paymentHistory);
 
  if(!sortedPayments.length){
   container.innerHTML = '<div class="card"><div class="empty">لا توجد دفعات مسجلة حتى الآن</div></div>';
