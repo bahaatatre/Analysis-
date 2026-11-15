@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <link rel="apple-touch-icon" href="https://i.ibb.co/7dZwx86V/1-B82-EC81-D38-C-4-ECB-8-FCE-991-D9957-FAB8.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#006b68">
@@ -18,16 +17,142 @@ body{margin:0;width:100%;min-height:100vh;background:linear-gradient(180deg,#eaf
 button,input{font:inherit}
 button{cursor:pointer}
 .app{width:min(100%,1024px);margin:0 auto;padding:0 14px 22px}
-.hero{position:relative;margin:0 -14px 14px;padding:20px 18px 24px;color:white;text-align:center;background:radial-gradient(circle at 15% 10%,#087f79,#004b50 68%);border-radius:0 0 42px 42px;box-shadow:var(--shadow);overflow:hidden}
+
+/* الهيدر وزر القائمة المنبثقة */
+.hero{position:relative;margin:0 -14px 14px;padding:22px 54px 24px;color:white;text-align:center;background:radial-gradient(circle at 15% 10%,#087f79,#004b50 68%);border-radius:0 0 42px 42px;box-shadow:var(--shadow);overflow:hidden}
 .hero:after{content:"";position:absolute;inset:auto -8% -35px;height:54px;border-radius:50%;background:#eaf6fa;transform:rotate(-2deg)}
 .hero h1{position:relative;z-index:1;margin:0;font-size:clamp(21px,4.2vw,36px);line-height:1.35;font-weight:850}
 .hero p{position:relative;z-index:1;margin:5px 0 0;font-size:clamp(13px,2.2vw,19px);font-weight:600}
+
+.menu-trigger{
+  position:absolute;
+  top:16px;
+  right:16px;
+  z-index:10;
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,0.28);
+  background:rgba(255,255,255,0.16);
+  backdrop-filter:blur(4px);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:21px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.15);
+  transition:transform .15s, background .2s;
+}
+.menu-trigger:hover{background:rgba(255,255,255,0.26)}
+.menu-trigger:active{transform:scale(0.95)}
+
+/* القائمة الجانبية المنبثقة */
+.drawer-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(4,34,42,0.48);
+  z-index:998;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .25s ease, visibility .25s ease;
+}
+.drawer-overlay.open{
+  opacity:1;
+  visibility:visible;
+}
+.drawer-menu{
+  position:fixed;
+  top:0;
+  right:0;
+  width:min(285px,82vw);
+  height:100vh;
+  background:#ffffff;
+  z-index:999;
+  box-shadow:-6px 0 24px rgba(0,45,55,0.22);
+  transform:translateX(100%);
+  transition:transform .28s cubic-bezier(.22,1,.36,1);
+  display:flex;
+  flex-direction:column;
+}
+.drawer-menu.open{
+  transform:translateX(0);
+}
+.drawer-header{
+  padding:20px 16px;
+  background:linear-gradient(120deg,#087f79,#004b50);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.drawer-header span{
+  font-weight:850;
+  font-size:17px;
+}
+.drawer-close{
+  background:rgba(255,255,255,0.18);
+  border:0;
+  color:#fff;
+  width:32px;
+  height:32px;
+  border-radius:9px;
+  font-size:16px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.drawer-nav{
+  padding:14px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:100%;
+  padding:13px 14px;
+  border-radius:14px;
+  border:1px solid #e1edf2;
+  background:#f7fbfd;
+  color:#073b45;
+  font-size:15px;
+  font-weight:800;
+  text-align:right;
+  transition:all .18s ease;
+}
+.nav-item:hover{
+  background:#e6f5f6;
+  border-color:#b2dfe1;
+}
+.nav-item.active{
+  background:linear-gradient(100deg,#00a85a,#006563);
+  color:#fff;
+  border-color:transparent;
+  box-shadow:0 4px 10px rgba(0,115,95,0.22);
+}
+.nav-icon{
+  width:24px;
+  height:24px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+/* إدارة الصفحات */
+.page-view{display:none}
+.page-view.active{display:block;animation:fadeIn .22s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
 .date-row{display:flex;justify-content:flex-start;margin:0 0 12px}
 .date-box{display:flex;align-items:center;gap:10px;background:#effafa;border:1px solid #cce7e8;border-radius:18px;padding:8px 12px;box-shadow:var(--shadow);color:var(--deep)}
 .date-box label{font-size:13px;font-weight:800}
 .date-box input{border:0;background:transparent;color:var(--deep);font-weight:750;min-width:0}
 .card{background:#fff;border:1px solid #d8e9ef;border-radius:22px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
-.section-head{padding:11px 16px;background:linear-gradient(100deg,#00a85a,#005657);color:#fff;font-size:clamp(16px,2.8vw,23px);font-weight:850}
+.section-head{padding:11px 16px;background:linear-gradient(100deg,#00a85a,#005657);color:#fff;font-size:clamp(16px,2.8vw,23px);font-weight:850;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .entry-body{padding:13px 16px 15px}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .field{min-width:0}
@@ -39,6 +164,18 @@ button{cursor:pointer}
 .btn-add{width:100%;margin-top:11px;background:linear-gradient(100deg,#20d36c,#00765d);font-size:18px}
 .btn-pay{background:linear-gradient(100deg,#21c96b,#00795c)}
 .btn-pay-total{background:linear-gradient(100deg,#f59e0b,#d97706)}
+.btn-clear-sub{
+  background:linear-gradient(110deg,#ff4d59,#d90d1d);
+  color:#fff;
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:11px;
+  padding:7px 12px;
+  font-size:13px;
+  font-weight:800;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+.btn-clear-sub:active{transform:scale(0.97)}
+
 .payment-row{display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:end;padding:13px 16px}
 .payment-row .field input{height:42px}
 .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px}
@@ -53,6 +190,7 @@ button{cursor:pointer}
 .debt-edit{display:flex;gap:6px;align-items:center;margin-top:2px}
 .debt-edit input{width:100%;min-width:0;height:32px;border:1px solid #ffffff80;border-radius:9px;background:#ffffffeb;color:#063e4a;padding:4px 7px;font-weight:800}
 .debt-edit button{border:0;border-radius:9px;padding:6px 9px;background:#fff;color:#00675b;font-size:12px;font-weight:850;white-space:nowrap}
+
 .table-wrap{max-height:310px;overflow-y:auto;overflow-x:auto;overscroll-behavior:contain;border-bottom-left-radius:22px;border-bottom-right-radius:22px}
 table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:13px}
 th,td{padding:10px 6px;border-bottom:1px solid #e0e8ef;text-align:center;overflow-wrap:anywhere}
@@ -68,14 +206,136 @@ td.notes{text-align:right}
 .action-btn{border:0;border-radius:8px;padding:6px 7px;font-size:11px;font-weight:850;color:#fff;white-space:nowrap}
 .edit-btn{background:#168bd5}
 .del-btn{background:#ef4444}
-.empty{text-align:center;padding:22px;color:#7b8797}
+.empty{text-align:center;padding:22px;color:#7b8797;font-weight:700}
+
+/* تنسيق صفحة سجل البيانات (الأرشيف) */
+.archive-group{
+  background:#fff;
+  border:2px solid #007c78;
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  margin-bottom:16px;
+  overflow:hidden;
+}
+.archive-group-head{
+  padding:11px 15px;
+  background:linear-gradient(100deg,#006c68,#004b50);
+  color:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  font-weight:800;
+  font-size:14px;
+}
+.archive-group-summary{
+  background:#eef8f8;
+  padding:10px 15px;
+  border-top:1px solid #cde4e5;
+  display:flex;
+  justify-content:space-around;
+  flex-wrap:wrap;
+  gap:10px;
+  font-size:13px;
+  font-weight:800;
+  color:#064d50;
+}
+
+/* تنسيق صفحة الراتب الشهري */
+.salary-month-group{
+  background:#fff;
+  border:1.5px solid #bfe0e2;
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  margin-bottom:16px;
+  overflow:hidden;
+}
+.salary-month-head{
+  padding:11px 16px;
+  background:linear-gradient(100deg,#0875cf,#054a8c);
+  color:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.salary-month-title{
+  font-size:16px;
+  font-weight:850;
+}
+.salary-month-range{
+  font-size:12px;
+  background:rgba(255,255,255,0.18);
+  padding:4px 10px;
+  border-radius:10px;
+  font-weight:700;
+}
+.salary-table{
+  font-size:11px;
+}
+.salary-table th, .salary-table td{
+  padding:6px 5px;
+}
+.salary-month-footer{
+  padding:13px 16px;
+  background:#f0f8ff;
+  border-top:1.5px solid #cfe4f7;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.salary-total-box{
+  text-align:center;
+}
+.salary-total-label{
+  font-size:12px;
+  color:#48627a;
+  font-weight:750;
+  margin-bottom:2px;
+}
+.salary-total-val{
+  font-size:17px;
+  font-weight:900;
+  color:#054a8c;
+}
+.salary-total-val.money{
+  color:#007c5c;
+}
+
+/* تنسيق صفحة الدفعات */
+.payments-summary-bar{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:14px;
+}
+.pay-stat-card{
+  background:linear-gradient(120deg,#d97706,#9a3412);
+  color:#fff;
+  border-radius:18px;
+  padding:12px 14px;
+  box-shadow:var(--shadow);
+  text-align:center;
+}
+.pay-stat-card:nth-child(2){
+  background:linear-gradient(120deg,#0875cf,#064b9c);
+}
+.pay-stat-label{font-size:13px;font-weight:800;opacity:.92;margin-bottom:4px}
+.pay-stat-val{font-size:21px;font-weight:900}
+
 .footer-actions{display:flex;justify-content:center;gap:12px;margin:16px auto 22px;max-width:760px}
 .footer-actions .btn{flex:1;max-width:340px;font-size:clamp(13px,2.2vw,18px);padding:13px 10px}
 .btn-danger{background:linear-gradient(110deg,#ff4d59,#d90d1d)}
 .footer{margin:20px -14px 0;padding:22px 12px;text-align:center;color:white;font-size:16px;font-weight:850;background:linear-gradient(100deg,#007c78,#00474b);border-radius:45% 45% 0 0 / 22% 22% 0 0}
+
 @media(max-width:560px){
  .app{padding:0 9px 16px}
- .hero{margin-left:-9px;margin-right:-9px;padding:16px 10px 21px;border-radius:0 0 30px 30px}
+ .hero{margin-left:-9px;margin-right:-9px;padding:18px 46px 21px;border-radius:0 0 30px 30px}
+ .menu-trigger{top:12px;right:10px;width:38px;height:38px;font-size:19px}
  .date-row{margin-bottom:9px}
  .date-box{padding:6px 9px}
  .card{border-radius:17px;margin-bottom:11px}
@@ -94,6 +354,9 @@ td.notes{text-align:right}
  .payment-row .btn{padding:10px 11px;font-size:13px;width:100%}
  table{font-size:10px}
  th,td{padding:7px 3px}
+ .salary-table{font-size:9.5px}
+ .salary-table th, .salary-table td{padding:5px 3px}
+ .salary-total-val{font-size:15px}
  .action-btn{font-size:9px;padding:5px 5px}
  .actions{gap:3px}
  .footer-actions{gap:8px;margin:13px 0 18px}
@@ -103,100 +366,249 @@ td.notes{text-align:right}
 </style>
 </head>
 <body>
+
+<!-- خلفية القائمة المنبثقة -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+
+<!-- القائمة المنبثقة من أعلى يمين الشاشة -->
+<aside class="drawer-menu" id="drawerMenu" aria-label="القائمة الرئيسية">
+  <div class="drawer-header">
+    <span>القائمة الرئيسية</span>
+    <button type="button" class="drawer-close" onclick="closeDrawer()" aria-label="إغلاق القائمة">✕</button>
+  </div>
+  <nav class="drawer-nav">
+    <button type="button" class="nav-item active" id="nav-home" onclick="switchPage('home')">
+      <span class="nav-icon">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/>
+        </svg>
+      </span>
+      <span>الصفحة الرئيسية</span>
+    </button>
+
+    <button type="button" class="nav-item" id="nav-archive" onclick="switchPage('archive')">
+      <span class="nav-icon">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="16" rx="2"/>
+          <line x1="7" y1="9" x2="17" y2="9"/>
+          <line x1="7" y1="13" x2="17" y2="13"/>
+          <line x1="7" y1="17" x2="13" y2="17"/>
+        </svg>
+      </span>
+      <span>سجل البيانات</span>
+    </button>
+
+    <button type="button" class="nav-item" id="nav-payments" onclick="switchPage('payments')">
+      <span class="nav-icon">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <line x1="2" y1="10" x2="22" y2="10"/>
+          <line x1="6" y1="15" x2="10" y2="15"/>
+        </svg>
+      </span>
+      <span>الدفعات</span>
+    </button>
+
+    <button type="button" class="nav-item" id="nav-salary" onclick="switchPage('salary')">
+      <span class="nav-icon">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="6" width="20" height="12" rx="2"/>
+          <circle cx="12" cy="12" r="2.5"/>
+          <path d="M6 12h.01M18 12h.01"/>
+        </svg>
+      </span>
+      <span>الراتب</span>
+    </button>
+  </nav>
+</aside>
+
 <div class="app">
 <header class="hero">
- <h1>إدارة إنتاج كراتين السجائر</h1>
- <p>سهولة في الإدارة .. دقة في الحسابات</p>
+  <button type="button" class="menu-trigger" onclick="openDrawer()" aria-label="فتح القائمة">☰</button>
+  <h1>إدارة إنتاج كراتين السجائر</h1>
+  <p id="heroSubtitle">سهولة في الإدارة .. دقة في الحسابات</p>
 </header>
 
-<div class="date-row">
- <div class="date-box">
-   <label for="entryDate">التاريخ</label>
-   <input type="date" id="entryDate" onchange="validateDateInput(this)">
- </div>
-</div>
+<!-- ==================== 1. الصفحة الرئيسية ==================== -->
+<main id="page-home" class="page-view active">
+  <div class="date-row">
+   <div class="date-box"><label for="entryDate">التاريخ</label><input type="date" id="entryDate"></div>
+  </div>
 
-<section class="card">
- <div class="section-head">عدد الكراتين (مثال: 1.5 أو 0.1 ألف)</div>
- <div class="entry-body">
-  <form id="productionForm" onsubmit="saveEntry(event)">
-   <input type="hidden" id="editingId">
-   <div class="form-grid">
-    <div class="field"><label for="cartonsInput">عدد الكراتين</label><input type="number" id="cartonsInput" step="any" min="0" placeholder="أدخل عدد الكراتين..." required></div>
-    <div class="field"><label for="notes">ملاحظات إضافية</label><input type="text" id="notes" placeholder="ملاحظات إضافية..."></div>
+  <section class="card">
+   <div class="section-head">عدد الكراتين (مثال: 1.0 كرتونة أو 1.1 ألف)</div>
+   <div class="entry-body">
+    <form id="productionForm" onsubmit="saveEntry(event)">
+     <input type="hidden" id="editingId">
+     <div class="form-grid">
+      <div class="field"><label for="cartonsInput">عدد الكراتين</label><input type="number" id="cartonsInput" step="any" min="0" placeholder="أدخل عدد الكراتين..." required></div>
+      <div class="field"><label for="notes">ملاحظات إضافية</label><input type="text" id="notes" placeholder="ملاحظات إضافية..."></div>
+     </div>
+     <button type="submit" id="submitBtn" class="btn btn-add">＋ إضافة قيد جديد</button>
+    </form>
    </div>
-   <button type="submit" id="submitBtn" class="btn btn-add">＋ إضافة قيد جديد</button>
-  </form>
- </div>
+  </section>
+
+  <!-- سجل العمليات -->
+  <section class="card">
+   <div class="section-head">سجل العمليات (من الأحدث إلى الأقدم)</div>
+   <div class="table-wrap">
+    <table>
+     <colgroup><col style="width:11%"><col style="width:19%"><col style="width:15%"><col style="width:17%"><col style="width:19%"><col style="width:19%"></colgroup>
+     <thead><tr><th>اليوم</th><th>التاريخ</th><th>الكراتين</th><th>السعر</th><th>الملاحظات</th><th>الإجراءات</th></tr></thead>
+     <tbody id="tableBody"></tbody>
+    </table>
+   </div>
+  </section>
+
+  <section class="card">
+   <div class="section-head">الإدارة المالية والدفعات</div>
+   <div class="payment-row">
+    <div class="field"><label for="paymentAmount">المبلغ المدفوع (جزئي أو كلي)</label><input type="number" id="paymentAmount" min="0" step="0.01" placeholder="أدخل المبلغ المدفوع"></div>
+    <button type="button" class="btn btn-pay" id="paymentBtn" onclick="processPayment()">تسديد المبلغ</button>
+    <button type="button" class="btn btn-pay-total" onclick="processTotalPayment()">تسديد كلي</button>
+   </div>
+  </section>
+
+  <!-- الإحصائيات -->
+  <section class="stats">
+   <div class="stat"><div class="stat-label">إجمالي الكراتين</div><div class="stat-value" id="totalCartons">0.0 <small>كرتونة</small></div></div>
+   <div class="stat"><div class="stat-label">إجمالي السعر</div><div class="stat-value" id="totalPrice">0.00 <small>شيقل</small></div></div>
+   <div class="stat"><div class="stat-label">المبلغ المدين</div><div class="debt-edit"><input type="number" id="globalDebtInput" min="0" step="0.01" value="0" aria-label="المبلغ المدين"><button type="button" onclick="saveGlobalDebtFromInput()">تحديث</button></div></div>
+   <div class="stat"><div class="stat-label">المبلغ الكلي</div><div class="stat-value" id="totalDue">0.00 <small>شيقل</small></div></div>
+  </section>
+
+  <div class="footer-actions">
+   <button type="button" class="btn btn-danger" onclick="clearAllData()">تصفير السجل بالكامل　▤</button>
+  </div>
+</main>
+
+<!-- ==================== 2. صفحة سجل البيانات (المؤرشفة بدون الدفعات) ==================== -->
+<section id="page-archive" class="page-view">
+  <div class="card">
+    <div class="section-head">
+      <span>سجل البيانات (العمليات التي تم تصفيرها)</span>
+      <button type="button" class="btn-clear-sub" onclick="clearArchiveData()">🗑 حذف البيانات</button>
+    </div>
+  </div>
+  <div id="archiveContainer"></div>
 </section>
 
-<!-- سجل العمليات -->
-<section class="card">
- <div class="section-head">سجل العمليات (من الأحدث إلى الأقدم)</div>
- <div class="table-wrap">
-  <table>
-   <colgroup><col style="width:11%"><col style="width:19%"><col style="width:15%"><col style="width:17%"><col style="width:19%"><col style="width:19%"></colgroup>
-   <thead><tr><th>اليوم</th><th>التاريخ</th><th>الكراتين</th><th>السعر</th><th>الملاحظات</th><th>الإجراءات</th></tr></thead>
-   <tbody id="tableBody"></tbody>
-  </table>
- </div>
+<!-- ==================== 3. صفحة الدفعات ==================== -->
+<section id="page-payments" class="page-view">
+  <div class="card">
+    <div class="section-head">
+      <span>سجل الدفعات (المبلغ ومقابله بالكراتين)</span>
+    </div>
+  </div>
+  <div id="paymentsContainer"></div>
 </section>
 
-<section class="card">
- <div class="section-head">الإدارة المالية والدفعات</div>
- <div class="payment-row">
-  <div class="field"><label for="paymentAmount">المبلغ المدفوع (جزئي أو كلي)</label><input type="number" id="paymentAmount" min="0" step="0.01" placeholder="أدخل المبلغ المدفوع"></div>
-  <button type="button" class="btn btn-pay" id="paymentBtn" onclick="processPayment()">تسديد المبلغ</button>
-  <button type="button" class="btn btn-pay-total" onclick="processTotalPayment()">تسديد كلي</button>
- </div>
+<!-- ==================== 4. صفحة الراتب الشهري ==================== -->
+<section id="page-salary" class="page-view">
+  <div class="card">
+    <div class="section-head">
+      <span>حساب الراتب الشهري التلقائي</span>
+      <button type="button" class="btn-clear-sub" onclick="clearSalaryData()">🗑 حذف البيانات</button>
+    </div>
+  </div>
+  <div id="salaryContainer"></div>
 </section>
 
-<!-- الإحصائيات -->
-<section class="stats">
- <div class="stat"><div class="stat-label">إجمالي الكراتين</div><div class="stat-value" id="totalCartons">0.000 <small>كرتونة</small></div></div>
- <div class="stat"><div class="stat-label">إجمالي السعر</div><div class="stat-value" id="totalPrice">0.00 <small>شيقل</small></div></div>
- <div class="stat"><div class="stat-label">المبلغ المدين</div><div class="debt-edit"><input type="number" id="globalDebtInput" min="0" step="0.01" value="0" aria-label="المبلغ المدين"><button type="button" onclick="saveGlobalDebtFromInput()">تحديث</button></div></div>
- <div class="stat"><div class="stat-label">المبلغ الكلي</div><div class="stat-value" id="totalDue">0.00 <small>شيقل</small></div></div>
-</section>
-
-<div class="footer-actions">
- <button type="button" class="btn btn-danger" onclick="clearAllData()">تصفير السجل بالكامل　▤</button>
-</div>
 <footer class="footer">إدارة أفضل .. لعمل أكثر نجاحاً</footer>
 </div>
 
 <script>
 let entries = JSON.parse(localStorage.getItem('cigarette_entries') || '[]');
+let archivedGroups = JSON.parse(localStorage.getItem('cigarette_archived_groups') || '[]');
+let paymentHistory = JSON.parse(localStorage.getItem('cigarette_payment_history') || '[]');
 let globalDebt = Number(localStorage.getItem('cigarette_global_debt') || 0);
 let editingPaymentId = null;
 
-window.addEventListener('DOMContentLoaded', () => {
- resetFormDate();
- const todayStr = getLocalDateString();
- document.getElementById('entryDate').max = todayStr;
- document.getElementById('globalDebtInput').value = globalDebt;
- renderApp();
-});
+/* ترحيل أي دفعات سابقة موجودة في السجل أو الأرشيف إلى سجل الدفعات تلقائياً مرة واحدة */
+function migrateExistingPayments(){
+ const existingIds = new Set(paymentHistory.map(p => p.id));
+ let added = false;
+ entries.forEach(item => {
+  if(item.isPayment && !existingIds.has(item.id)){
+   paymentHistory.push({...item});
+   existingIds.add(item.id);
+   added = true;
+  }
+ });
+ archivedGroups.forEach(group => {
+  (group.records || []).forEach(item => {
+   if(item.isPayment && !existingIds.has(item.id)){
+    paymentHistory.push({...item});
+    existingIds.add(item.id);
+    added = true;
+   }
+  });
+ });
+ if(added){
+  localStorage.setItem('cigarette_payment_history', JSON.stringify(paymentHistory));
+ }
+}
 
-function getLocalDateString(){
+function getTodayLocalDate(){
  const d = new Date();
  return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
 }
 
+/* تنسيق الكراتين: خانة عشرية واحدة مثل 1.0 و 1.1 */
+function formatCartons(val){
+ const num = Number(val) || 0;
+ return num.toFixed(1);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+ migrateExistingPayments();
+ resetFormDate();
+ document.getElementById('globalDebtInput').value = globalDebt;
+ renderApp();
+});
+
+/* التحكم بالقائمة المنبثقة والتنقل بين الصفحات */
+function openDrawer(){
+ document.getElementById('drawerMenu').classList.add('open');
+ document.getElementById('drawerOverlay').classList.add('open');
+}
+function closeDrawer(){
+ document.getElementById('drawerMenu').classList.remove('open');
+ document.getElementById('drawerOverlay').classList.remove('open');
+}
+function switchPage(pageName){
+ closeDrawer();
+ document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+ document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+ document.getElementById('page-' + pageName).classList.add('active');
+ document.getElementById('nav-' + pageName).classList.add('active');
+
+ const subtitles = {
+   home: 'سهولة في الإدارة .. دقة في الحسابات',
+   archive: 'أرشيف سجلات الإنتاج التي تم تصفيرها مسبقاً',
+   payments: 'سجل المبالغ المدفوعة وما يقابلها بعدد الكراتين',
+   salary: 'حساب الراتب الشهري التلقائي من بداية لنهاية كل شهر'
+ };
+ document.getElementById('heroSubtitle').textContent = subtitles[pageName] || subtitles.home;
+
+ if(pageName === 'archive') renderArchive();
+ if(pageName === 'payments') renderPayments();
+ if(pageName === 'salary') renderSalary();
+ window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
 function resetFormDate(){
- document.getElementById('entryDate').value = getLocalDateString();
+ const today = getTodayLocalDate();
+ const dateInput = document.getElementById('entryDate');
+ dateInput.max = today;
+ dateInput.value = today;
 }
-
-function validateDateInput(input){
- const todayStr = getLocalDateString();
- if(input.value > todayStr){
-  alert('عذراً، لا يمكن إضافة أو تحديد تاريخ في المستقبل! يرجى اختيار التاريخ الحالي أو السابق.');
-  input.value = todayStr;
- }
-}
-
 function saveToStorage(){
  localStorage.setItem('cigarette_entries',JSON.stringify(entries));
+ localStorage.setItem('cigarette_archived_groups',JSON.stringify(archivedGroups));
+ localStorage.setItem('cigarette_payment_history',JSON.stringify(paymentHistory));
  localStorage.setItem('cigarette_global_debt',String(globalDebt));
 }
 function calculatePrice(cartons){return cartons*50}
@@ -219,13 +631,13 @@ function saveEntry(e){
  const date=document.getElementById('entryDate').value;
  const cartons=Number(document.getElementById('cartonsInput').value);
  const notes=document.getElementById('notes').value.trim();
- 
+ const today = getTodayLocalDate();
+
  if(!date||!Number.isFinite(cartons)||cartons<=0){alert('أدخل التاريخ وعدد كراتين صحيحاً.');return}
 
- const todayStr = getLocalDateString();
- if(date > todayStr){
-  alert('عذراً، لا يمكن إضافة أو تسجيل كراتين لأيام لاحقة (مستقبلية). يرجى اختيار التاريخ الحالي أو السابق.');
-  resetFormDate();
+ /* منع إضافة عدد كراتين في تاريخ مستقبلي */
+ if(date > today){
+  alert('لا يمكن إضافة عدد كراتين في تاريخ مستقبلي! الرجاء اختيار تاريخ اليوم أو تاريخ سابق.');
   return;
  }
 
@@ -252,7 +664,6 @@ function editEntry(id){
  document.getElementById('submitBtn').textContent='حفظ التعديل';
  document.getElementById('productionForm').scrollIntoView({behavior:'smooth',block:'start'});
 }
-
 function editPaymentEntry(id){
  const item=entries.find(x=>x.id===id);
  if(!item||!item.isPayment)return;
@@ -282,6 +693,7 @@ function deleteEntry(id){
    globalDebt += debtReduction;
    document.getElementById('globalDebtInput').value = globalDebt;
   }
+  paymentHistory = paymentHistory.filter(p => p.id !== id);
  }
 
  entries=entries.filter(x=>x.id!==id);
@@ -289,14 +701,57 @@ function deleteEntry(id){
  saveToStorage();renderApp();
 }
 
+/* تصفير السجل بالكامل مع أرشفة قيود الإنتاج فقط (بدون قيود تسديد المبلغ) */
 function clearAllData(){
- if(!confirm('هل أنت متأكد من تصفير وحذف جميع البيانات؟'))return;
+ if(!confirm('هل أنت متأكد من تصفير السجل بالكامل؟\nسيتم حفظ قيود الإنتاج في صفحة (سجل البيانات) قبل التصفير.'))return;
+
+ const productionOnly = entries.filter(item => !item.isPayment);
+
+ if(productionOnly.length > 0){
+  const now = new Date();
+  const resetDateStr = new Date(now.getTime()-now.getTimezoneOffset()*60000).toISOString().slice(0,10);
+  const resetTimeStr = now.toTimeString().slice(0,5);
+  archivedGroups.unshift({
+   archiveId: Date.now(),
+   resetDate: resetDateStr,
+   resetTime: resetTimeStr,
+   records: JSON.parse(JSON.stringify(productionOnly))
+  });
+ }
+
  entries=[];globalDebt=0;editingPaymentId=null;
- localStorage.removeItem('cigarette_entries');localStorage.removeItem('cigarette_global_debt');
+ saveToStorage();
  document.getElementById('globalDebtInput').value=0;
  document.getElementById('paymentBtn').textContent='تسديد المبلغ';
  document.getElementById('productionForm').reset();resetFormDate();
  renderApp();
+}
+
+/* حذف بيانات صفحة سجل البيانات (الأرشيف) مع رسالة تأكيد */
+function clearArchiveData(){
+ if(!archivedGroups.length){
+  alert('لا توجد بيانات في سجل البيانات لحذفها.');
+  return;
+ }
+ if(!confirm('هل أنت متأكد من حذف جميع البيانات المحفوظة في سجل البيانات نهائياً؟ لا يمكن التراجع عن هذا الإجراء.'))return;
+ archivedGroups = [];
+ saveToStorage();
+ renderArchive();
+}
+
+/* حذف بيانات الراتب مع رسالة تأكيد */
+function clearSalaryData(){
+ const hasProductionInEntries = entries.some(item => !item.isPayment);
+ if(!archivedGroups.length && !hasProductionInEntries){
+  alert('لا توجد بيانات في الراتب لحذفها.');
+  return;
+ }
+ if(!confirm('هل أنت متأكد من حذف جميع بيانات الراتب؟ سيتم حذف سجلات الإنتاج المحفوظة والحالية الخاصة بحساب الراتب.'))return;
+ archivedGroups = [];
+ entries = entries.filter(item => item.isPayment);
+ saveToStorage();
+ renderApp();
+ renderSalary();
 }
 
 function processPayment(){
@@ -317,24 +772,26 @@ function processPayment(){
  }
 
  const today=document.getElementById('entryDate').value;
- const todayStr = getLocalDateString();
- if(today > todayStr){
-  alert('عذراً، لا يمكن تحديد تاريخ مستقبلي لإجراء عمليات التسديد!');
-  resetFormDate();
-  return;
- }
-
  const cartons=amount/50;
  if(editingPaymentId){
-  const oldItem = entries.find(x=>x.id===editingPaymentId);
-  if(oldItem){
-   deleteEntry(editingPaymentId);
-  }
+  entries = entries.filter(x=>x.id!==editingPaymentId);
+  paymentHistory = paymentHistory.filter(x=>x.id!==editingPaymentId);
   editingPaymentId=null;
   document.getElementById('paymentBtn').textContent='تسديد المبلغ';
  }
 
- entries.push({id:Date.now(),date:today,day:getDayName(today),cartons,price:amount,notes:`تسديد مبلغ ${amount.toFixed(2)} شيقل`,isPayment:true});
+ const newPayment = {
+  id:Date.now(),
+  date:today,
+  day:getDayName(today),
+  cartons,
+  price:amount,
+  notes:`تسديد مبلغ ${amount.toFixed(2)} شيقل`,
+  isPayment:true
+ };
+
+ entries.push(newPayment);
+ paymentHistory.push({...newPayment});
  document.getElementById('paymentAmount').value='';
  saveToStorage();renderApp();
 }
@@ -355,16 +812,9 @@ function processTotalPayment(){
  document.getElementById('globalDebtInput').value = 0;
 
  const today=document.getElementById('entryDate').value;
- const todayStr = getLocalDateString();
- if(today > todayStr){
-  alert('عذراً، لا يمكن تحديد تاريخ مستقبلي لإجراء عمليات التسديد!');
-  resetFormDate();
-  return;
- }
-
  const cartons = totalAmountToPay / 50;
 
- entries.push({
+ const newPayment = {
   id: Date.now(),
   date: today,
   day: getDayName(today),
@@ -372,7 +822,10 @@ function processTotalPayment(){
   price: totalAmountToPay,
   notes: `تسديد كلي شامل (${totalAmountToPay.toFixed(2)} شيقل)`,
   isPayment: true
- });
+ };
+
+ entries.push(newPayment);
+ paymentHistory.push({...newPayment});
 
  saveToStorage();
  renderApp();
@@ -394,7 +847,7 @@ function renderApp(){
  sorted.forEach(item=>{
   const tr=document.createElement('tr');
   const sign=item.isPayment?'-':'';
-  const cartons=(Number(item.cartons)||0).toFixed(3);
+  const cartons=formatCartons(item.cartons);
   const price=(Number(item.price)||0).toFixed(2);
   const editFn=item.isPayment?'editPaymentEntry':'editEntry';
   
@@ -411,9 +864,227 @@ function renderApp(){
    <td><div class="actions"><button class="action-btn edit-btn" onclick="${editFn}(${Number(item.id)})">تعديل</button><button class="action-btn del-btn" onclick="deleteEntry(${Number(item.id)})">حذف</button></div></td>`;
   tbody.appendChild(tr);
  });
- document.getElementById('totalCartons').innerHTML=`${netCartons.toFixed(3)} <small>كرتونة</small>`;
+ document.getElementById('totalCartons').innerHTML=`${formatCartons(netCartons)} <small>كرتونة</small>`;
  document.getElementById('totalPrice').innerHTML=`${netPrice.toFixed(2)} <small>شيقل</small>`;
  document.getElementById('totalDue').innerHTML=`${totalDue.toFixed(2)} <small>شيقل</small>`;
+}
+
+/* عرض صفحة سجل البيانات (كل تصفير في مجموعة بإطار وبدون قيود تسديد المبلغ) */
+function renderArchive(){
+ const container = document.getElementById('archiveContainer');
+ container.innerHTML = '';
+
+ if(!archivedGroups.length){
+  container.innerHTML = '<div class="card"><div class="empty">لا توجد سجلات مصفّرة محفوظة حتى الآن</div></div>';
+  return;
+ }
+
+ archivedGroups.forEach((group, idx) => {
+  const groupNumber = archivedGroups.length - idx;
+  const prodRecords = [...(group.records || [])]
+   .filter(item => !item.isPayment)
+   .sort((a,b) => b.id - a.id);
+
+  if(!prodRecords.length) return;
+
+  let prodCartons = 0, prodPrice = 0;
+  let rowsHtml = '';
+
+  prodRecords.forEach(item => {
+   const c = Number(item.cartons) || 0;
+   const p = Number(item.price) || 0;
+   prodCartons += c;
+   prodPrice += p;
+
+   rowsHtml += `
+    <tr>
+     <td>${safeText(item.day || getDayName(item.date))}</td>
+     <td dir="ltr">${safeText(item.date)}</td>
+     <td>${formatCartons(c)}</td>
+     <td>${p.toFixed(2)}</td>
+     <td class="notes">${safeText(item.notes || '-')}</td>
+    </tr>`;
+  });
+
+  const groupEl = document.createElement('div');
+  groupEl.className = 'archive-group';
+  groupEl.innerHTML = `
+   <div class="archive-group-head">
+    <span>مجموعة تصفير رقم #${groupNumber}</span>
+    <span dir="ltr">تاريخ التصفير: ${safeText(group.resetDate)} (${safeText(group.resetTime || '')})</span>
+   </div>
+   <div class="table-wrap" style="border-radius:0">
+    <table>
+     <colgroup><col style="width:14%"><col style="width:22%"><col style="width:17%"><col style="width:19%"><col style="width:28%"></colgroup>
+     <thead><tr><th>اليوم</th><th>التاريخ</th><th>الكراتين</th><th>السعر</th><th>الملاحظات</th></tr></thead>
+     <tbody>${rowsHtml}</tbody>
+    </table>
+   </div>
+   <div class="archive-group-summary">
+    <span>إجمالي كراتين المجموعة: ${formatCartons(prodCartons)} كرتونة</span>
+    <span>إجمالي مبلغ المجموعة: ${prodPrice.toFixed(2)} شيقل</span>
+   </div>
+  `;
+  container.appendChild(groupEl);
+ });
+}
+
+/* عرض صفحة الدفعات (كل تسديد مبلغ يظهر المبلغ ومقابله بالكراتين) */
+function renderPayments(){
+ const container = document.getElementById('paymentsContainer');
+ container.innerHTML = '';
+
+ const sortedPayments = [...paymentHistory].sort((a,b) => b.id - a.id);
+
+ if(!sortedPayments.length){
+  container.innerHTML = '<div class="card"><div class="empty">لا توجد دفعات مسجلة حتى الآن</div></div>';
+  return;
+ }
+
+ let totalPaidMoney = 0;
+ let totalPaidCartons = 0;
+ let rowsHtml = '';
+
+ sortedPayments.forEach(item => {
+  const money = Number(item.price) || 0;
+  const cartonsEq = Number(item.cartons) || (money / 50);
+  totalPaidMoney += money;
+  totalPaidCartons += cartonsEq;
+
+  rowsHtml += `
+   <tr class="payment-highlight">
+    <td>${safeText(item.day || getDayName(item.date))}</td>
+    <td dir="ltr">${safeText(item.date)}</td>
+    <td><strong>${money.toFixed(2)} شيقل</strong></td>
+    <td><strong>${formatCartons(cartonsEq)} كرتونة</strong></td>
+    <td class="notes">${safeText(item.notes || '-')}</td>
+   </tr>`;
+ });
+
+ container.innerHTML = `
+  <div class="payments-summary-bar">
+   <div class="pay-stat-card">
+    <div class="pay-stat-label">إجمالي المبالغ المسددة</div>
+    <div class="pay-stat-val">${totalPaidMoney.toFixed(2)} شيقل</div>
+   </div>
+   <div class="pay-stat-card">
+    <div class="pay-stat-label">ما يقابلها بالكراتين</div>
+    <div class="pay-stat-val">${formatCartons(totalPaidCartons)} كرتونة</div>
+   </div>
+  </div>
+  <div class="card">
+   <div class="table-wrap" style="max-height:460px">
+    <table>
+     <colgroup><col style="width:14%"><col style="width:20%"><col style="width:20%"><col style="width:20%"><col style="width:26%"></colgroup>
+     <thead><tr><th>اليوم</th><th>التاريخ</th><th>المبلغ المدفوع</th><th>المقابل بالكراتين</th><th>التفاصيل</th></tr></thead>
+     <tbody>${rowsHtml}</tbody>
+    </table>
+   </div>
+  </div>
+ `;
+}
+
+/* عرض صفحة الراتب الشهري التلقائي */
+function renderSalary(){
+ const container = document.getElementById('salaryContainer');
+ container.innerHTML = '';
+
+ const allProductionRecords = [];
+ const seenIds = new Set();
+
+ entries.forEach(item => {
+  if(!item.isPayment && item.date){
+   allProductionRecords.push(item);
+   seenIds.add(item.id);
+  }
+ });
+
+ archivedGroups.forEach(group => {
+  (group.records || []).forEach(item => {
+   if(!item.isPayment && item.date && !seenIds.has(item.id)){
+    allProductionRecords.push(item);
+    seenIds.add(item.id);
+   }
+  });
+ });
+
+ if(!allProductionRecords.length){
+  container.innerHTML = '<div class="card"><div class="empty">لا توجد بيانات إنتاج لحساب الراتب الشهري بعد</div></div>';
+  return;
+ }
+
+ const monthsMap = {};
+ allProductionRecords.forEach(item => {
+  const ym = item.date.slice(0, 7);
+  if(!monthsMap[ym]) monthsMap[ym] = [];
+  monthsMap[ym].push(item);
+ });
+
+ const sortedMonths = Object.keys(monthsMap).sort((a, b) => b.localeCompare(a));
+
+ const arabicMonths = [
+  'يناير (1)', 'فبراير (2)', 'مارس (3)', 'أبريل (4)',
+  'مايو (5)', 'يونيو (6)', 'يوليو (7)', 'أغسطس (8)',
+  'سبتمبر (9)', 'أكتوبر (10)', 'نوفمبر (11)', 'ديسمبر (12)'
+ ];
+
+ sortedMonths.forEach(ym => {
+  const [yearStr, monthStr] = ym.split('-');
+  const year = Number(yearStr);
+  const month = Number(monthStr);
+  const lastDay = new Date(year, month, 0).getDate();
+  const rangeLabel = `1/${month} إلى ${lastDay}/${month}`;
+  const monthTitle = `شهر ${arabicMonths[month - 1]} - ${year}`;
+
+  const monthRecords = monthsMap[ym].sort((a, b) => a.date.localeCompare(b.date) || a.id - b.id);
+
+  let totalCartons = 0;
+  let totalAmount = 0;
+  let rowsHtml = '';
+
+  monthRecords.forEach(item => {
+   const c = Number(item.cartons) || 0;
+   const p = Number(item.price) || 0;
+   totalCartons += c;
+   totalAmount += p;
+
+   rowsHtml += `
+    <tr>
+     <td>${safeText(item.day || getDayName(item.date))}</td>
+     <td dir="ltr">${safeText(item.date)}</td>
+     <td>${formatCartons(c)}</td>
+     <td>${p.toFixed(2)}</td>
+     <td class="notes">${safeText(item.notes || '-')}</td>
+    </tr>`;
+  });
+
+  const monthCard = document.createElement('div');
+  monthCard.className = 'salary-month-group';
+  monthCard.innerHTML = `
+   <div class="salary-month-head">
+    <span class="salary-month-title">${monthTitle}</span>
+    <span class="salary-month-range">${rangeLabel}</span>
+   </div>
+   <div class="table-wrap" style="border-radius:0;max-height:240px">
+    <table class="salary-table">
+     <colgroup><col style="width:14%"><col style="width:22%"><col style="width:17%"><col style="width:19%"><col style="width:28%"></colgroup>
+     <thead><tr><th>اليوم</th><th>التاريخ</th><th>الكراتين</th><th>السعر</th><th>الملاحظات</th></tr></thead>
+     <tbody>${rowsHtml}</tbody>
+    </table>
+   </div>
+   <div class="salary-month-footer">
+    <div class="salary-total-box">
+     <div class="salary-total-label">مجموع الكراتين للشهر</div>
+     <div class="salary-total-val">${formatCartons(totalCartons)} كرتونة</div>
+    </div>
+    <div class="salary-total-box">
+     <div class="salary-total-label">المبلغ الإجمالي (الراتب)</div>
+     <div class="salary-total-val money">${totalAmount.toFixed(2)} شيقل</div>
+    </div>
+   </div>
+  `;
+  container.appendChild(monthCard);
+ });
 }
 </script>
 </body>
